@@ -57,5 +57,81 @@
 
 
 
+## 제어문
 
+#### For
+
+```go
+// C언어와 같은 경우
+for init; condition; post { }
+
+// C언어의 while 처럼 사용
+for condition { }
+
+// key,value range 탐색
+for key, value := range oldMap { 
+    newMap[key] = value
+}
+
+// key range 탐색
+for key := range m {
+    //something
+}
+
+// value range 탐색
+for _, value := range m {
+    //something
+}
+
+// Reverse a, 여러 개의 변수를 사용할려면 병렬 할당을 사용
+// 병렬 할당 --> i, j := 0, len(a)-1
+for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
+    a[i], a[j] = a[j], a[i]
+}
+```
+
+
+
+#### Switch
+
+- Go 언어에서는 스위치는 C언어보다 더 일반적인 표현이 가능, 따라서 `if-else-if-else` 형태보다 `switch`  로 작성하는 것이 더 Go 언어답다.
+
+> 이 부분은 이해가 잘 가지 않는다. 향후 이해가 가면 설명을 덧붙이도록 하자
+
+```go
+func unhex(c byte) byte {
+    switch {
+    case '0' <= c && c <= '9':
+        return c - '0'
+    case 'a' <= c && c <= 'f':
+        return c - 'a' + 10
+    case 'A' <= c && c <= 'F':
+        return c - 'A' + 10
+    }
+    return 0
+}
+```
+
+
+
+#### Type switch
+
+- 스위치 구문은 **인터페이스 변수의 동적 타입**을 확인하는데 사용 할 수 있다.
+
+```go
+var t interface{}
+t = functionOfSomeType()
+switch t := t.(type) {
+default:
+    fmt.Printf("unexpected type %T\n", t)     // %T prints whatever type t has
+case bool:
+    fmt.Printf("boolean %t\n", t)             // t has type bool
+case int:
+    fmt.Printf("integer %d\n", t)             // t has type int
+case *bool:
+    fmt.Printf("pointer to boolean %t\n", *t) // t has type *bool
+case *int:
+    fmt.Printf("pointer to integer %d\n", *t) // t has type *int
+}
+```
 
