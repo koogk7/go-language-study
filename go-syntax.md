@@ -144,3 +144,81 @@ func calc(f calculator, a int, b int) int {
 
 
 
+### Collection
+
+**Array**
+
+- **Go에서 배열크기는 Type을 구성하는 한 요소이다.** 즉 [3]int와 [5]int는 서로 다른 타입이다.
+
+- 초기화
+
+  ```go
+  var a1 = [3]int{1, 2, 3}
+  var a3 = [...]int{1, 2, 3} //배열크기 자동으로
+  
+  // 다차원 배열
+  var multiArray [3][4][5]int  // 정의
+  var a = [2][3]int{
+          {1, 2, 3},
+          {4, 5, 6}, 
+      } // 초기화
+  ```
+
+
+
+**Slice**
+
+> 슬라이스는 실제 배열을 가리키는 포인터 정보, 세그먼트의 길이, 용량 세가지 필드로 구성되어 있다.
+
+- 내부적으로 배열로 구현되어 있지만, 고정된 크기를 지정하지 않고 크기를 동적으로 변경할 수 있으며 부분 배열을 추출 할 수 있다.
+
+  ```go
+  package main
+  import "fmt"
+   
+  func main() {
+      var a []int        //슬라이스 변수 선언
+      a = []int{1, 2, 3} //슬라이스에 리터럴값 지정
+      a[1] = 10
+      fmt.Println(a)     // [1, 10, 3]출력
+    
+    // make(type, len, capacity)로 슬라이스 선언가능
+    // length 만큼 Zero value가 할당된다.
+  	  s := make([]int, 5, 10) 
+      println(len(s), cap(s)) // len 5, cap 10
+  }
+  ```
+
+  > 슬라이스에 별도의 길이와 용량을 지정하지 않으면, 기본적으로 길이와 용량이 0 인 슬라이스를 만드는데, 이를 *Nil Slice* 라 하고, nil 과 비교하면 참을 리턴한다.
+
+- 활용
+
+  ```go
+  func main() {
+    s := []int{0, 1, 2, 3, 4, 5}
+    s[2:5]  // 2,3,4 마지막 인덱스는 +1 을 한다. 파이썬과 동일
+    s[1:] // 1,2,3,4,5
+    s[:3] // 0,1,2
+    s = s[:] // 0,1,2,3,4,5
+   		
+    // 배열 추가
+    s = append(s, 6, 7, 8) // 0,1,2,3,4,5,6,7,8
+    
+    sliceA := []int{1, 2, 3}
+    sliceB := []int{4, 5, 6}
+  
+    // 배열을 합치기 위해서는 ...(자바스크립트의 전개 연산자)를 사용한다.
+    sliceA = append(sliceA, sliceB...)
+  	fmt.Println(sliceA) // [1 2 3 4 5 6] 출력
+    
+    // 배열 deep 복사
+    source := []int{0, 1, 2}
+    target := make([]int, len(source), cap(source)*2)
+    copy(target, source)
+    fmt.Println(target)  // [0 1 2 ] 출력
+    println(len(target), cap(target)) // 3, 6 출력
+  }
+  ```
+
+  > 추가시에 용량을 초과하는 경우 기존 용량의 2배에 해당하는 새로운 Underlying array를 생성하고 기존 배열 값들을 모두 복제하여 새로 할당한다.
+
