@@ -222,3 +222,108 @@ func calc(f calculator, a int, b int) int {
 
   > 추가시에 용량을 초과하는 경우 기존 용량의 2배에 해당하는 새로운 Underlying array를 생성하고 기존 배열 값들을 모두 복제하여 새로 할당한다.
 
+
+
+### Struct
+
+- struct는 필드 데이터만 가지며, 메서드를 갖지 않는다. 메서드는 별도로 분리하여 정의한다.
+
+```go
+package main
+ 
+import "fmt"
+ 
+// struct 정의
+// 외부 패키지에서 사용할 수 있게 할려면 Person으로 정의하면 된다.
+type person struct { 
+    name string
+    age  int
+}
+ 
+func main() {
+    // person 객체 생성
+    p := person{}
+     
+    // 필드값 설정
+    p.name = "Lee"
+    p.age = 10
+     
+    fmt.Println(p)
+}
+```
+
+
+
+### Method
+
+- 메서드는 특별한 형태의 함수이다.
+
+```go
+package main
+ 
+//Rect - struct 정의
+type Rect struct {
+    width, height int
+}
+ 
+//Rect의 area() 메소드
+//일반 함수와 시그니처가 다르다
+func (r Rect) area() int {
+    return r.width * r.height   
+}
+ 
+func main() {
+    rect := Rect{10, 20}
+    area := rect.area() //메서드 호출
+    println(area)
+}
+```
+
+
+
+### Interface
+
+- 메서드들의 집합체
+
+```go
+type Shape interface {
+    area() float64
+    perimeter() float64
+}
+```
+
+- Empty Interface는 어떠한 타입도 담을 수 있는 컨테이너로 Dynamic Type으로 볼 수 있다.
+
+```go
+package main
+ 
+import "fmt"
+ 
+func main() {
+    var x interface{}
+    x = 1 
+    x = "Tom"
+ 
+    printIt(x)
+}
+ 
+func printIt(v interface{}) {
+    fmt.Println(v) //Tom
+}
+
+```
+
+- 인터페이스 타입의 x에 대해서 x.(T)으로 표현할 경우, x가 nil이 아니며, T 타입일 경우 확인하는 것으로 `Type Assertion` 이라고 부른다. 확인이 시래하면 런타입 에러가 발생한다.
+
+```go
+func main() {
+    var a interface{} = 1
+ 
+    i := a       // a와 i 는 dynamic type, 값은 1
+    j := a.(int) // j는 int 타입, 값은 1
+ 
+    println(i)  // 포인터주소 출력
+    println(j)  // 1 출력
+}
+```
+
