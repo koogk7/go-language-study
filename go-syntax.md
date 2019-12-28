@@ -67,3 +67,19 @@ str := "ABC"
 bytes := []byte(str)
 ```
 
+
+
+### Conditional Statement
+
+- If 문에서 조건식 이전에 간단한 문장(Optional Statement)를 함께 실행 할 수 있다. 단 이때 정의된 변수는 if-else문 안에서만 사용 할 수 있다.
+
+  ```go
+  // Optional Statement는 switch, for문 등에서도 사용 할 수 있다.
+  if val := i * 2; val < max {
+      println(val)
+  }
+  ```
+
+- **swtich문에서 break를 사용하지 않아도 다음 case로 가지 않는다.**
+- 다른 언어와 달리swtich문 뒤에 expression이 없을 수도 있다. 이 경우 true로 보고 첫번째 case문으로 이동하여 검사한다.
+
