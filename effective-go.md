@@ -139,4 +139,49 @@ case *int:
 
 ## 함수
 
-- Go 언어는 함수와 메소드가 여러 값을 반환 할 수 있다.
+>  함수에 대한 기본은 [go-syntax]() 참고
+
+**Defer**
+
+defer를 실행하는 함수가 반환되기 전에 즉각 함수 호출을 실행하도록 예약한다.
+
+```go
+// Contents returns the file's contents as a string.
+func Contents(filename string) (string, error) {
+    f, err := os.Open(filename)
+    if err != nil {
+        return "", err
+    }
+    defer f.Close()  // Contens 함수가 반환되기 직전까지 실행이 미루어진다.
+
+    var result []byte
+    buf := make([]byte, 100)
+    for {
+        n, err := f.Read(buf[0:])
+        result = append(result, buf[0:n]...) // append is discussed later.
+        if err != nil {
+            if err == io.EOF {
+                break
+            }
+            return "", err  // f will be closed if we return here.
+        }
+    }
+    return string(result), nil // f will be closed if we return here.
+}
+```
+
+위와 같이 f.Close()와 같은 함수의 호출을 지연시키면 아래와 같은 장점을 얻게 된다.
+
+- 파일을 닫는 것을 잊어버리는 실수를 하지 않도록 보장
+- open 근처에 close가 위치하면 함수 맨 끝에 위치하는 것 보다 훨씬 명확한 코드가 되는것을 의미한다.
+
+**defer 함수의 매개변수들은 함수의 호출이 실행될때가 아닌 defer가 실행될 때 평가된다. 지연된 함수들은 LIFO 순서에 의해 실행된다.**
+
+```go
+for i := 0; i < 5; i++ {
+    defer fmt.Printf("%d ", i)
+}
+// 4 3 2 1 0 출력
+// 가장 늦게 들어온 마지막 defer가 먼저 출력되는데, defer문을 만났을 때 i는 4임으로 매개변수는 4로 확정되어 스택에 저장된다.
+```
+
