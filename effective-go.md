@@ -96,7 +96,7 @@ for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
 
 - Go 언어에서는 스위치는 C언어보다 더 일반적인 표현이 가능, 따라서 `if-else-if-else` 형태보다 `switch`  로 작성하는 것이 더 Go 언어답다.
 
-> 이 부분은 이해가 잘 가지 않는다. 향후 이해가 가면 설명을 덧붙이도록 하자
+> Miss-Understand : 이 부분은 이해가 잘 가지 않는다. 향후 이해가 가면 설명을 덧붙이도록 하자
 
 ```go
 func unhex(c byte) byte {
@@ -183,5 +183,121 @@ for i := 0; i < 5; i++ {
 }
 // 4 3 2 1 0 출력
 // 가장 늦게 들어온 마지막 defer가 먼저 출력되는데, defer문을 만났을 때 i는 4임으로 매개변수는 4로 확정되어 스택에 저장된다.
+```
+
+
+
+## Data
+
+> Go에는 내장 함수인 new와 make 두 가지 방식으로 메모리를 할당 할 수 있다.
+
+**Composite Litieral**
+
+```go
+a := [...]string   {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+s := []string      {Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+```
+
+> Miss-Understand : 이 부분은 잘 이해가 안간다.
+
+
+
+**New**
+
+- 메모리를 초기화하지 않고 단지 값을 Zero화 한다. 즉 새**로 제로값으로 할당된 타입 T를 가리키는 포인터를 반환한다.**
+
+- `new(File)` 은 `&File{}` 와 동일한 표현이다.
+
+  ```go
+  func NewFile(fd int, name string) *File {
+      if fd < 0 {
+          return nil
+      }
+  		return &File{fd: fd, name: name}
+  }
+  ```
+
+
+
+**New vs Make**
+
+- **make는 maps, slices 그리고 channels에만 적영되며 포인터를 반환하지 않는다.**
+
+```go
+var p *[]int = new([]int)       // slice 구조체를 할당한다; *p == nil; 거의 유용하지 않다
+var v  []int = make([]int, 100) // slice v는 이제 100개의 int를 갖는 배열을 참조한다
+
+// 불필요하게 복잡한 경우:
+var p *[]int = new([]int)
+*p = make([]int, 100, 100)
+
+// Go 언어다운 경우:
+v := make([]int, 100)
+```
+
+
+
+**Maps**
+
+- Map의 **Key는 equality 연산이 정의되어 있는 어떤 타입도 가능**(slice는 equlity가 정의되어 있지 않아 불가)
+- Map 역시 Slice와 마찬가지로 내부 데이터 구조를 가진다. **즉 함수에서 변경하면 호출자에게도 변경이 반영된다.**
+
+```go
+// 초기화
+var timeZone = map[string]int{
+    "UTC":  0*60*60,
+    "EST": -5*60*60,
+    "CST": -6*60*60,
+    "MST": -7*60*60,
+    "PST": -8*60*60,
+}
+
+// 키 값 확인
+var seconds int
+var ok bool
+// 만약 tz가 있다면 ok는 true, 없다면 seconds는 제로값이 되고 ok는 fasle가 된다.
+seconds, ok = timeZone[tz] // comma ok라고 부른다
+
+// 삭제
+delete(timeZone, "PDT") // 키가 없더라도 에러가 발생하지 않는다.
+```
+
+
+
+**Print**
+
+```go
+type T struct {
+    a int
+    b float64
+    c string
+}
+t := &T{ 7, -2.35, "abc\tdef" }
+// v는 어떤 자료형이든 출력이 가능하다.
+fmt.Printf("%v\n", t)
+fmt.Printf("%+v\n", t) // 구조체 필드 이름까지 출력
+fmt.Printf("%#v\n", t) // 완전한 Go 문법 출력
+fmt.Printf("%#v\n", timeZone)
+fmt.Printf("%T\n", timeZone) // 값의 타입 출력
+
+
+// 콘솔 출력
+&{7 -2.35 abc   def}
+&{a:7 b:-2.35 c:abc     def}
+&main.T{a:7, b:-2.35, c:"abc\tdef"}
+map[string] int{"CST":-21600, "PST":-28800, "EST":-18000, "UTC":0, "MST":-25200}
+map[string] int
+```
+
+
+
+커스텀 타입의 기본 포맷을 설정하기 위해서는 `String() string` 메서드를 정의해주면 된다.
+
+```go
+func (t *T) String() string {
+    return fmt.Sprintf("%d/%g/%q", t.a, t.b, t.c)
+}
+fmt.Printf("%v\n", t) // 7/-2.35/"abc\tdef"
 ```
 
