@@ -83,3 +83,64 @@ bytes := []byte(str)
 - **swtich문에서 break를 사용하지 않아도 다음 case로 가지 않는다.**
 - 다른 언어와 달리swtich문 뒤에 expression이 없을 수도 있다. 이 경우 true로 보고 첫번째 case문으로 이동하여 검사한다.
 
+
+
+### Function
+
+> Go 언어에서 함수는 일급객체이다.
+
+```go
+package main
+func main() {
+  	// 함수는 패키지 안에 정의되며, 호출되는 함수가 반드시 앞에 있을 필요는 없다.
+    say("This", "is", "a", "book")
+    say("Hi")
+  
+    count, total := sum(1, 7, 3, 5, 9)
+    println(count, total)   
+}
+ 
+func say(msg ...string) { // ...는 가변 파라미터를 나타낸다.
+    for _, s := range msg {
+        println(s)
+    }
+}
+
+// 리턴타입은 함수 이름 다음에 명시한다.
+// 여러 개의 리턴이 가능하다.
+func sum(nums ...int) (int, int) {
+    s := 0      // 합계
+    count := 0  // 요소 갯수
+    for _, n := range nums {
+        s += n
+        count++
+    }
+    return count, s
+}
+
+// 아래와 같이 리턴값에 이름을 붙일 수 있다.
+// 이 경우에는 리턴에 아무 값을 담아주지 않는다.
+func sum(nums ...int) (count int, total int) {
+    for _, n := range nums {
+      total += n
+    }
+    count = len(nums)
+    return
+}
+```
+
+- type 문을 이용한 함수 원형 정의
+
+```go
+// 원형 정의
+type calculator func(int, int) int
+ 
+// calculator 원형 사용, 이를 Delegate라고 부른다.
+func calc(f calculator, a int, b int) int {
+    result := f(a, b)
+    return result
+}
+```
+
+
+
