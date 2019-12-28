@@ -1,3 +1,3 @@
 # Go Langauge Study
 
-- effective-go
+- effective-g.o
