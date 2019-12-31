@@ -45,7 +45,7 @@
       Orange       // 2
   )
   ```
-
+- 숫자형 상수는 var로 표현할 수 없는 범위를 저장하는 등 수를 정밀하게 표현 할 수 있다.
 
 
 ### String
@@ -79,6 +79,13 @@ bytes := []byte(str)
       println(val)
   }
   ```
+- **else 문은 if가 닫히는 } 와 같은 줄에 작성되어야 한다**
+  ```go
+    if val := i * 2; val < max {
+        println(val)
+    } else {
+      // ...something
+    }
 
 - **swtich문에서 break를 사용하지 않아도 다음 case로 가지 않는다.**
 - 다른 언어와 달리swtich문 뒤에 expression이 없을 수도 있다. 이 경우 true로 보고 첫번째 case문으로 이동하여 검사한다.
