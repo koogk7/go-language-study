@@ -8,16 +8,17 @@ import (
 )
 
 // 두번째 인자는 port 번호
-var addr = flag.String("addr", ":8080", "http service address")
+var portNumber = "8080"
+var addr = flag.String("addr", ":"+portNumber, "http service address")
 var temple = template.Must(template.New("qr").Parse(templateStr)) // HTML 템플릿 제작
 
-func main()  {
+func main() {
 	// HTTP 포트 세팅
 	flag.Parse()
 
 	// URL 바인딩
 	http.Handle("/", http.HandlerFunc(QR))
-
+	log.Println("Port Number: " + portNumber)
 	//
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {
@@ -29,7 +30,6 @@ func QR(w http.ResponseWriter, req *http.Request) {
 	// HTML 템플릿 렌더링
 	_ = temple.Execute(w, req.FormValue("s"))
 }
-
 
 const templateStr = `
 <html>
