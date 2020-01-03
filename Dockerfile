@@ -12,7 +12,7 @@ COPY /example .
 COPY ./docker.sh .  
 
 
-CMD ["source", "./docker.sh"]
+CMD /bin/bash -c "source ./docker.sh"
 
 # Port 설정
 EXPOSE 8080
