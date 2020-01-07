@@ -33,7 +33,6 @@ func gen(nums ...int) <-chan int {
 	return out
 }
 
-// in <- chan int 를 받으므로, 받은 채널에서는 데이터를 꺼낼 수만 있다.
 func sq(in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
