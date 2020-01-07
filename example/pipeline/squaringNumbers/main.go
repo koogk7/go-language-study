@@ -10,12 +10,13 @@ import "fmt"
 
 func main() {
 	c := gen(2, 3)
+	println("=end")
 	out := sq(c)
 
 	fmt.Println(<-out)
 	fmt.Println(<-out)
 
-	// sq는 inbound, outbound가 같기 때문에 이런 식으로 조합 가능
+	//sq는 inbound, outbound가 같기 때문에 이런 식으로 조합 가능
 	for n := range sq(sq(gen(2, 3))) {
 		fmt.Println(n)
 	}

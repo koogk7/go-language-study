@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 /*
@@ -11,17 +12,26 @@ import (
 		--> sq
 	gen 		---> mere 구조
 		--> sq
+	unbuffered 채널에 값을 주는 애는, 받는 애가 나오기 전까지 그 라인에 묶여있다.
 */
 
 func main() {
-	in := gen(2, 3)
+	//in := gen(2, 3)
+	var wg sync.WaitGroup
+	var arr = []int{1, 2}
 
-	c1 := sq(in)
-	c2 := sq(in)
+	wg.Add(1)
+	gen(arr, &wg)
+	time.Sleep(time.Second * 5)
+	wg.Wait()
+	fmt.Println("End")
 
-	for n := range merge(c1, c2) {
-		fmt.Println(n)
-	}
+	//c1 := sq(in)
+	//c2 := sq(in)
+	//
+	//for n := range merge(c1, c2) {
+	//	fmt.Println(n)
+	//}
 }
 
 func merge(cs ...<-chan int) <-chan int {
@@ -48,13 +58,14 @@ func merge(cs ...<-chan int) <-chan int {
 	return out
 }
 
-func gen(nums ...int) <-chan int {
+func gen(nums []int, wg *sync.WaitGroup) <-chan int {
 	out := make(chan int)
 	go func() {
 		for _, n := range nums {
-			out <- n
+			out <- n // 다른 녀석이 빼갈 때 까지 기다림
 		}
 		close(out)
+		wg.Done()
 	}()
 	return out
 }
