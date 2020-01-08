@@ -6,11 +6,11 @@ type Phone struct {
 	model string
 }
 
-func (p Phone) Call(num string){
+func (p Phone) Call(num string) {
 	fmt.Println("Ring Ring...", num)
 }
 
-func (p Phone) GetModel() string{
+func (p Phone) GetModel() string {
 	return p.model
 }
 
@@ -22,7 +22,7 @@ func (c Camera) TakePicture() {
 	fmt.Println("Cheese~~~")
 }
 
-func (c Camera) GetModel() string{
+func (c Camera) GetModel() string {
 	return c.model
 }
 
@@ -32,8 +32,7 @@ type SmartPhone struct {
 	owner string
 }
 
-
-func main()  {
+func main() {
 	myPhone := SmartPhone{
 		Phone:  Phone{model: "iphone-x"},
 		Camera: Camera{model: "sony-500"},
@@ -48,4 +47,3 @@ func main()  {
 	fmt.Println(myPhone.Phone.GetModel())
 	fmt.Println(myPhone.Camera.GetModel())
 }
-

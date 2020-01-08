@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	done 과 select를 이용한 early return 은 잠잭어르 블락된 샌더의 수를 알아야 하며
+	done 과 select를 이용한 early return 은 잠재적으 블락된 샌더의 수를 알아야 하며
 	샌더의 시그널을 정리해야 함으로 좋지 않다.
 	그래서 close channel을 추천한다.
 	닫힌 채널에 대한 리시브 오퍼레이션은 항상 즉시 zero value를 가져온다.
