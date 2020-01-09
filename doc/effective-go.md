@@ -96,7 +96,6 @@ for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
 
 - Go 언어에서는 스위치는 C언어보다 더 일반적인 표현이 가능, 따라서 `if-else-if-else` 형태보다 `switch`  로 작성하는 것이 더 Go 언어답다.
 
-> Miss-Understand : 이 부분은 이해가 잘 가지 않는다. 향후 이해가 가면 설명을 덧붙이도록 하자
 
 ```go
 func unhex(c byte) byte {
