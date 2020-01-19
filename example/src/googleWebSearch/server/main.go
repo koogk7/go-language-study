@@ -16,6 +16,20 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+var resultsTemplate = template.Must(template.New("results").Parse(`
+<html>
+<head/>
+<body>
+  <ol>
+  {{range .Results}}
+    <li>{{.Title}} - <a href="{{.URL}}">{{.URL}}</a></li>
+  {{end}}
+  </ol>
+  <p>{{len .Results}} results in {{.Elapsed}}; timeout {{.Timeout}}</p>
+</body>
+</html>
+`))
+
 func handleSearch(w http.ResponseWriter, req *http.Request) {
 	var (
 		ctx    context.Context
@@ -58,17 +72,3 @@ func handleSearch(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 }
-
-var resultsTemplate = template.Must(template.New("results").Parse(`
-<html>
-<head/>
-<body>
-  <ol>
-  {{range .Results}}
-    <li>{{.Title}} - <a href="{{.URL}}">{{.URL}}</a></li>
-  {{end}}
-  </ol>
-  <p>{{len .Results}} results in {{.Elapsed}}; timeout {{.Timeout}}</p>
-</body>
-</html>
-`))
